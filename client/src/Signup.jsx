@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
@@ -22,6 +21,8 @@ function Signup() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        console.log({ firstName, lastName, email, username, idNumber, accountNumber, password });
 
 //-------------Adding input validation
         if (!emailRegex.test(email)) {
@@ -58,6 +59,7 @@ function Signup() {
                 password
             });
             console.log(result.data);
+            alert("User registered successfully!");
    
         } catch (error) {
             console.error(error);

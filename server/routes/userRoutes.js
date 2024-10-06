@@ -16,6 +16,8 @@ const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 //-------------------------- POST request to handle signup
 router.post('/signup', async (req, res) => {
     const { firstName, lastName, email, username, idNumber, accountNumber, password} = req.body;
+    console.log("Received signup request:", req.body);
+
 //-------------Adding input validation
     if (!emailRegex.test(email)) {
         return res.status(400).json({ error: 'Invalid email format' });
@@ -53,6 +55,7 @@ router.post('/signup', async (req, res) => {
         
         res.status(201).json({ message: 'User registered successfully' });
     } catch (err) {
+        console.error("Error saving user:", err);
         res.status(500).json({ error: 'Error registering user' });
     }
 });
