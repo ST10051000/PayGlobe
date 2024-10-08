@@ -3,14 +3,18 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
+
+
+//------------Fix login
+const jwt = require('jsonwebtoken'); 
+//==============Fix login
+
 //-------------------------- Whitelist all input using RegEx patterns. 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const usernameRegex = /^[a-zA-Z0-9_]{3,30}$/;
 const idNumberRegex = /^\d{13}$/;
 const accountNumberRegex = /^\d{10}$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
-
 
 
 //-------------------------- POST request to handle signup
@@ -62,7 +66,13 @@ router.post('/signup', async (req, res) => {
 //==============================END POST request to handle signup
 //-------------------------------POST request to handle login
 router.post('/login', async (req, res) => {
-    const { identifier, password } = req.body;
+    //const { identifier, password } = req.body;
+    const { identifier } = req.body;
+
+//-----------------------Fix Login 2.0    
+    //console.log("Received login request:", { identifier, password: '****' });
+    console.log("Received login request:", { identifier });
+//=======================END: Fix Login 2.0  
 
 //-------------Adding input validation   
     const isUsernameValid = usernameRegex.test(identifier);
@@ -71,14 +81,18 @@ router.post('/login', async (req, res) => {
     if (!isUsernameValid && !isAccountNumberValid) {
         return res.status(400).json({ error: 'Identifier must be a valid username or account number' });
     }
-
+    /*
     if (!passwordRegex.test(password)) {
         return res.status(400).json({ error: 'Invalid password format' });
     }
-
+    */
 
     try {
-        if (!identifier || !password) {
+        //if (!identifier || !password)
+        if (!identifier ) {
+//---------Fix Login 2.0  
+            console.log("Missing identifier or password");
+//=========END: Fix Login 2.0              
             return res.status(400).json({ error: 'Both identifier and password are required' });
         }
 
@@ -86,24 +100,44 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({
             $or: [{ username: identifier }, { accountNumber: identifier }]
         });
+//------Fix Login 2.0
+        console.log("User found:", user ? 'Yes' : 'No');
+//======END: Fix Login 2.0        
 
         if (!user) {
             return res.status(400).json({ error: 'Invalid username or account number' });
         }
-
+        /*
         // Check if the password is correct
         const isMatch = await bcrypt.compare(password, user.password);
+//------Fix Login 2.0
+        console.log("Password match:", isMatch ? 'Yes' : 'No');
+//======END: Fix Login 2.0        
         if (!isMatch) {
+//------  Fix Login 2.0
+            console.log("Invalid password");
+//=======END: Fix Login 2.0          
             return res.status(400).json({ error: 'Invalid password' });
         }
+//---------- Fix login
+        const token = jwt.sign(
+            { userId: user._id, username: user.username },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+        */
+//============Fix login       
 
         // If login is successful, send a success response
-        res.status(200).json({ message: 'Login successful' });
+        res.status(200).json({ message: 'Login successful', token  });
+        //res.status(200).json({ message: 'Login successful' });
     } catch (error) {
-        console.error(error);
+        console.error(error);S
         res.status(500).json({ error: 'Error logging in. Please try again.' });
     }
 });
 //========================================END: POST request to handle login
+
+//---------- Fix login
 
 module.exports = router;

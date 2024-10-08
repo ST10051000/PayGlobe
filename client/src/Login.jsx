@@ -1,11 +1,15 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 function Login() {
     const [identifier, setIdentifier] = useState(""); // For username or account number
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+
+    const navigate = useNavigate();
+    
 
 //-----------RegEx Input Whitelisting
     const usernameRegex = /^[a-zA-Z0-9_]{3,30}$/; // Username: alphanumeric, 3-30 chars
@@ -15,6 +19,9 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+//-----------fixlog in
+        setError("");
+//============END:   fixlog in            
 //-----------RegEx Input Whitelisting  
         const isUsernameValid = usernameRegex.test(identifier);
         const isAccountNumberValid = accountNumberRegex.test(identifier);
@@ -31,15 +38,44 @@ function Login() {
 
 //===========END: RegEx Input Whitelisting 
         try {
+//--------------fixlog in2.0
+                console.log("Sending login request with:", { identifier, password });
+//=============END fixlog in 2.0         
             const result = await axios.post('http://localhost:5000/api/login', {
                 identifier, // Either username or account number
                 password
             });
-            console.log(result.data);
+//------------fixlog in2.0
+            console.log("Server response:", response.data);
+//===========END: fixlog in2.0            
+            
+//--------------fixlog in
+            if (result.data.success) {
+                localStorage.setItem('token', result.data.token);
+                navigate('/dashboard');
+            } else {
+                setError(response.data.message || "Login failed. Please check your credentials.");
+            }
+//==============fixlog in
+            //console.log(result.data);
+
+            //navigate("/dashboard");
+
             // Handle successful login, e.g., redirect to a dashboard
         } catch (error) {
+             console.error('Login error:', error);
+            if (error.response) {
+                console.error('Error response:', error.response.data);
+                setError(error.response.data.message || "Error logging in. Please try again.");
+            } else {
+                setError("An unexpected error occurred. Please try again.");
+            }
+//------------- fixlog in2.0 
+//==============END: fixlog in2.0            
+            /*
             console.error(error);
             setError("Error logging in. Please check your credentials.");
+            */
         }
     };
 

@@ -1,6 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+
 import axios from 'axios';
+
+
+
 
 function Signup() {
     const [firstName, setFirstName] = useState("");
@@ -12,6 +18,9 @@ function Signup() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
+
+    const navigate = useNavigate(); 
+    
 
 //-----------RegEx Input Whitelisting
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -28,7 +37,7 @@ function Signup() {
         if (!emailRegex.test(email)) {
             setError("Invalid email format");
             return;
-        }     
+        }      
         if (!usernameRegex.test(username)) {
             setError("Username must be alphanumeric and between 3-30 characters");
             return;
@@ -60,6 +69,12 @@ function Signup() {
             });
             console.log(result.data);
             alert("User registered successfully!");
+
+            localStorage.setItem('firstName', firstName);
+            localStorage.setItem('lastName', lastName);
+
+            navigate('/dashboard');
+            
    
         } catch (error) {
             console.error(error);
