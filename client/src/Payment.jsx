@@ -41,16 +41,26 @@ function Payment() {
             return;
         }
 
+
         try {
-            const response = await axios.post('https://localhost:5000/api/payment', {
+            //const response = await axios.post('https://localhost:5000/api/payment'
+            const response = await axios.post('http://localhost:5000/api/payment', {
                 recipientName,
                 recipientBank,
                 recipientAccount,
                 amount,
-                swiftCode
+                swiftCode 
             });
             console.log(response.data);
             alert("Payment successful!");
+
+            setRecipientName("");
+            setRecipientBank("");
+            setRecipientAccount("");
+            setAmount("");
+            setSwiftCode("");
+            setError("");
+            
         } catch (error) {
             console.error(error);
             setError("Payment failed. Please check the details.");

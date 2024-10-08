@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
-
+const Payoff = require('../models/payoff');
 
 //------------Fix login
 const jwt = require('jsonwebtoken'); 
@@ -16,6 +16,15 @@ const idNumberRegex = /^\d{13}$/;
 const accountNumberRegex = /^\d{10}$/;
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
+
+//-------------PAYMENT
+// Regex patterns for whitelisting input FOR 
+const nameRegex = /^[a-zA-Z\s]+$/;
+const bankRegex = /^[a-zA-Z\s]+$/;
+const accountBankNumberRegex = /^\d{10}$/;
+const amountRegex = /^\d+(\.\d{1,2})?$/;
+const swiftCodeRegex = /^[A-Z0-9]{8,11}$/;
+//===========END:PAYMENT
 
 //-------------------------- POST request to handle signup
 router.post('/signup', async (req, res) => {
@@ -66,78 +75,99 @@ router.post('/signup', async (req, res) => {
 //==============================END POST request to handle signup
 //-------------------------------POST request to handle login
 router.post('/login', async (req, res) => {
-    //const { identifier, password } = req.body;
-    const { identifier } = req.body;
-
-//-----------------------Fix Login 2.0    
-    //console.log("Received login request:", { identifier, password: '****' });
-    console.log("Received login request:", { identifier });
-//=======================END: Fix Login 2.0  
-
-//-------------Adding input validation   
-    const isUsernameValid = usernameRegex.test(identifier);
-    const isAccountNumberValid = accountNumberRegex.test(identifier);
-//=============END: Adding input validation 
-    if (!isUsernameValid && !isAccountNumberValid) {
-        return res.status(400).json({ error: 'Identifier must be a valid username or account number' });
-    }
-    /*
-    if (!passwordRegex.test(password)) {
-        return res.status(400).json({ error: 'Invalid password format' });
-    }
-    */
+    const { accountNumber, username } = req.body;
 
     try {
-        //if (!identifier || !password)
-        if (!identifier ) {
-//---------Fix Login 2.0  
-            console.log("Missing identifier or password");
-//=========END: Fix Login 2.0              
-            return res.status(400).json({ error: 'Both identifier and password are required' });
+        let user;
+
+        // Check if either accountNumber or username is provided
+        if (accountNumber) {
+            user = await User.findOne({ accountNumber });
+        } else if (username) {
+            user = await User.findOne({ username });
         }
 
-        // Find user by either username or account number
-        const user = await User.findOne({
-            $or: [{ username: identifier }, { accountNumber: identifier }]
-        });
-//------Fix Login 2.0
-        console.log("User found:", user ? 'Yes' : 'No');
-//======END: Fix Login 2.0        
-
-        if (!user) {
-            return res.status(400).json({ error: 'Invalid username or account number' });
+        // Respond accordingly
+        if (user) {
+            res.status(200).json({ message: 'User exists', user });
+        } else {
+            res.status(404).json({ message: 'User does not exist' });
         }
-        /*
-        // Check if the password is correct
-        const isMatch = await bcrypt.compare(password, user.password);
-//------Fix Login 2.0
-        console.log("Password match:", isMatch ? 'Yes' : 'No');
-//======END: Fix Login 2.0        
-        if (!isMatch) {
-//------  Fix Login 2.0
-            console.log("Invalid password");
-//=======END: Fix Login 2.0          
-            return res.status(400).json({ error: 'Invalid password' });
-        }
-//---------- Fix login
-        const token = jwt.sign(
-            { userId: user._id, username: user.username },
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
-        );
-        */
-//============Fix login       
-
-        // If login is successful, send a success response
-        res.status(200).json({ message: 'Login successful', token  });
-        //res.status(200).json({ message: 'Login successful' });
     } catch (error) {
-        console.error(error);S
-        res.status(500).json({ error: 'Error logging in. Please try again.' });
+        console.error(error);
+        res.status(500).json({ message: 'Error checking user', error });
     }
 });
 //========================================END: POST request to handle login
 
-//---------- Fix login
+//---------- Payment 
+router.post('/payment', async (req, res) => {
+    const {  recipientName, recipientBank, recipientAccount, amount, swiftCode  } = req.body;
+
+    if (!nameRegex.test(recipientName)) {
+        return res.status(400).json({ error: 'Invalid recipient name' });
+    }
+    if (!bankRegex.test(recipientBank)) {
+        return res.status(400).json({ error: 'Invalid bank name' });
+    }
+    if (!accountBankNumberRegex.test(recipientAccount)) {
+        return res.status(400).json({ error: 'Account number must be 10 digits' });
+    }
+    if (!amountRegex.test(amount)) {
+        return res.status(400).json({ error: 'Invalid amount format. Use 0.00 for decimal.' });
+    }
+    if (!swiftCodeRegex.test(swiftCode)) {
+        return res.status(400).json({ error: 'Invalid SWIFT code. Must be 8 to 11 characters.' });
+    }
+    try {
+        // Create a new payoff record
+        const payment = new Payoff({
+            recipientName,
+            recipientBank,
+            recipientAccount,
+            amount,
+            swiftCode,
+        });
+
+        // Save payment to the database
+        await payment.save();
+
+        res.status(201).json({ message: 'Payment recorded successfully', payment });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error recording payment', error });
+    }
+
+
+
+});
+
+//============END: Payment 
+
+// Endpoint to check if a user exists
+router.post('/check-user', async (req, res) => {
+    const { accountNumber, username  } = req.body;
+
+    try {
+        let user;
+
+        // Check if either email or userId is provided
+        if (accountNumber) {
+            user = await User.findOne({ accountNumber });
+        } else if (username ) {
+            user = await User.findById(username );
+        }
+
+        // Respond accordingly
+        if (user) {
+            res.status(200).json({ message: 'User exists', user });
+        } else {
+            res.status(404).json({ message: 'User does not exist' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error checking user', error });
+    }
+});
 
 module.exports = router;
