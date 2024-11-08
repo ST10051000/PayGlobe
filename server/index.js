@@ -47,6 +47,7 @@ mongoose.connect(process.env.MONGO_URI, {
 
 */
 
+//const userRoutes = require('./routes/userRoute');
 const userRoutes = require('./routes/userRoutes');
 app.use('/api', userRoutes);
 
@@ -69,7 +70,7 @@ https.createServer(sslOptions, app).listen(443, () => {
 http.createServer((req, res) => {
   res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
   res.end();
-}).listen(80, () => {
+}).listen(8080, () => {
   console.log('HTTP Server running on port 80 and redirecting to HTTPS');
 });
 //=======================END: SSL Setup

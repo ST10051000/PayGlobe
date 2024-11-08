@@ -75,29 +75,47 @@ router.post('/signup', async (req, res) => {
 //==============================END POST request to handle signup
 //-------------------------------POST request to handle login
 router.post('/login', async (req, res) => {
-    const { accountNumber, username } = req.body;
+    const { identifier, password } = req.body;
+    console.log("Received login request with data:", req.body);
 
     try {
         let user;
 
-        // Check if either accountNumber or username is provided
-        if (accountNumber) {
-            user = await User.findOne({ accountNumber });
-        } else if (username) {
-            user = await User.findOne({ username });
+        // Check if identifier is a valid account number or username
+        if (/^\d{10}$/.test(identifier)) {
+            console.log("Looking for user by account number:", identifier);
+            user = await User.findOne({ accountNumber: identifier });
+        } else {
+            console.log("Looking for user by username:", identifier);
+            user = await User.findOne({ username: identifier });
         }
 
-        // Respond accordingly
-        if (user) {
-            res.status(200).json({ message: 'User exists', user });
-        } else {
-            res.status(404).json({ message: 'User does not exist' });
+        if (!user) {
+            console.log("User not found");
+            return res.status(404).json({ message: 'User does not exist' });
         }
+
+        // Verify password
+        console.log("User found. Verifying password...");
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+        console.log("Password mismatch for user:", user.username);
+        console.log("Password comparison result:", isMatch);
+        return res.status(400).json({ message: 'Invalid credentials' });
+        }
+
+
+        // Login successful
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        console.log("Login successful");
+        res.status(200).json({ message: 'Login successful', token });
+
     } catch (error) {
-        console.error(error);
+        console.error("Error during login process:", error);
         res.status(500).json({ message: 'Error checking user', error });
     }
 });
+
 //========================================END: POST request to handle login
 
 //---------- Payment 
