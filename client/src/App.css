@@ -67,3 +67,238 @@ body, html {
 .homepage-container .btn-secondary:hover {
     background-color: #4a667a;
 }
+
+
+
+/* Dashboard Main Container */
+.dashboard {
+    display: flex;
+    height: 100vh;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f4f8;
+    color: #334e68;
+}
+
+/* Side Navigation Styling */
+.side-nav {
+    width: 200px;
+    background-color: #102a43;
+    color: #ffffff;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.side-nav h3 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.side-nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.side-nav ul li {
+    margin-bottom: 1rem;
+}
+
+.side-nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.side-nav ul li a:hover {
+    color: #3f72af;
+}
+
+/* Content Area Styling */
+.content {
+    flex-grow: 1;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    margin: 1rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.content h1 {
+    font-size: 2rem;
+    color: #102a43;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.content p {
+    color: #627d98;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* Banking Details Styling */
+.banking-details {
+    margin-bottom: 2rem;
+}
+
+.banking-details h2 {
+    font-size: 1.5rem;
+    color: #334e68;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.banking-details p {
+    font-size: 1rem;
+    color: #627d98;
+}
+
+/* Transactions Table Styling */
+.transactions h2 {
+    font-size: 1.5rem;
+    color: #334e68;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.transactions table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.transactions th, .transactions td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+}
+
+.transactions th {
+    background-color: #f0f4f8;
+    color: #627d98;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    border-bottom: 2px solid #d9e2ec;
+}
+
+.transactions td {
+    background-color: #ffffff;
+    color: #334e68;
+    font-size: 0.95rem;
+    border-bottom: 1px solid #d9e2ec;
+}
+
+.transactions tr:last-child td {
+    border-bottom: none;
+}
+
+/* Pay Again Button Styling */
+.transactions button {
+    background-color: #3f72af;
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.transactions button:hover {
+    background-color: #295182;
+}
+
+.payment-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f4f8;
+}
+
+/* Form box styling */
+.payment-form {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Heading styling */
+.payment-form h2 {
+    color: #102a43;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+}
+
+/* Input label styling */
+.payment-form label {
+    font-size: 0.9rem;
+    color: #627d98;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+    text-align: left;
+}
+
+/* Input field styling */
+.payment-form .form-control {
+    border-radius: 6px;
+    border: 1px solid #bcccdc;
+    padding: 0.75rem;
+    font-size: 1rem;
+    color: #334e68;
+    background-color: #f0f4f8;
+    transition: border-color 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.payment-form .form-control:focus {
+    border-color: #3f72af;
+    box-shadow: 0 0 0 2px rgba(63, 114, 175, 0.2);
+}
+
+/* Error message styling */
+.payment-form .text-danger {
+    color: #d9534f;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+/* Button styling */
+.payment-form .btn-success {
+    background-color: #3f72af;
+    border: none;
+    padding: 0.75rem;
+    font-weight: 600;
+    color: #ffffff;
+    width: 100%;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.payment-form .btn-success:hover {
+    background-color: #295182;
+}
+
+.payment-form .btn-secondary {
+    background-color: #627d98;
+    border: none;
+    padding: 0.75rem;
+    font-weight: 600;
+    color: #ffffff;
+    width: 100%;
+    margin-top: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.payment-form .btn-secondary:hover {
+    background-color: #334e68;
+}

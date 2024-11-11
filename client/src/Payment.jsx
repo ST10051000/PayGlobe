@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from 'axios';
+import './App.css';
 
 function Payment() {
     const [recipientName, setRecipientName] = useState("");
@@ -12,14 +13,13 @@ function Payment() {
     // RegEx patterns for validation
     const nameRegex = /^[a-zA-Z\s]+$/;
     const bankRegex = /^[a-zA-Z\s]+$/;
-    const accountNumberRegex = /^\d{10}$/;  // Assuming a 10-digit account number
-    const swiftCodeRegex = /^[A-Z0-9]{8,11}$/;  // 8 or 11 characters SWIFT code
-    const amountRegex = /^\d+(\.\d{1,2})?$/;  // Decimal amounts with 2 digits precision
+    const accountNumberRegex = /^\d{10}$/;
+    const swiftCodeRegex = /^[A-Z0-9]{8,11}$/;
+    const amountRegex = /^\d+(\.\d{1,2})?$/;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Input validation
         if (!nameRegex.test(recipientName)) {
             setError("Invalid recipient name");
             return;
@@ -41,15 +41,13 @@ function Payment() {
             return;
         }
 
-
         try {
-            //const response = await axios.post('https://localhost:5000/api/payment'
             const response = await axios.post('http://localhost:5000/api/payment', {
                 recipientName,
                 recipientBank,
                 recipientAccount,
                 amount,
-                swiftCode 
+                swiftCode
             });
             console.log(response.data);
             alert("Payment successful!");
@@ -60,7 +58,7 @@ function Payment() {
             setAmount("");
             setSwiftCode("");
             setError("");
-            
+
         } catch (error) {
             console.error(error);
             setError("Payment failed. Please check the details.");
@@ -68,8 +66,8 @@ function Payment() {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
-            <div className="bg-white p-3 rounded w-25">
+        <div className="payment-container">
+            <div className="payment-form">
                 <h2>International Payment Form</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
