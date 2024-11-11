@@ -1,8 +1,7 @@
 import { useState } from "react";
-//import { Link } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
-
 import axios from 'axios';
+import './Signup.css'; // Import the new CSS file
 
 function Signup() {
     const [firstName, setFirstName] = useState("");
@@ -15,10 +14,9 @@ function Signup() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
 
-    const navigate = useNavigate(); 
-    
+    const navigate = useNavigate();
 
-//-----------RegEx Input Whitelisting
+    // Validation Regex Patterns
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const usernameRegex = /^[a-zA-Z0-9_]{3,30}$/;
     const idNumberRegex = /^\d{13}$/; // Assuming an ID number is 13 digits
@@ -27,9 +25,6 @@ function Signup() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log({ firstName, lastName, email, username, idNumber, accountNumber, password });
-
-//-------------Adding input validation
         if (!emailRegex.test(email)) {
             setError("Invalid email format");
             return;
@@ -46,12 +41,10 @@ function Signup() {
             setError("Password must be at least 8 characters long, with at least one letter and one number");
             return;
         }
-        
         if (password !== confirmPassword) {
             setError("Passwords do not match");
             return;
         }
-//==================END: Adding input validation        
 
         try {
             const result = await axios.post('http://localhost:5000/api/signup', {
@@ -70,8 +63,6 @@ function Signup() {
             localStorage.setItem('lastName', lastName);
 
             navigate('/dashboard');
-            
-   
         } catch (error) {
             console.error(error);
             setError("Error registering user. Please try again.");
@@ -79,114 +70,118 @@ function Signup() {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
-            <div className="bg-white p-3 rounded w-25">
-                <h2>Register</h2>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                        <label htmlFor="firstName"><strong>First Name</strong></label>
-                        <input
-                            type="text"
-                            placeholder="Enter First Name"
-                            autoComplete="off"
-                            name="firstName"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            className="form-control rounded-0"
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="lastName"><strong>Last Name</strong></label>
-                        <input
-                            type="text"
-                            placeholder="Enter Last Name"
-                            autoComplete="off"
-                            name="lastName"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            className="form-control rounded-0"
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="email"><strong>Email</strong></label>
-                        <input
-                            type="email"
-                            placeholder="Enter Email"
-                            autoComplete="off"
-                            name="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="form-control rounded-0"
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="username"><strong>Username</strong></label>
-                        <input
-                            type="text"
-                            placeholder="Enter Username"
-                            autoComplete="off"
-                            name="username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            className="form-control rounded-0"
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="idNumber"><strong>ID Number</strong></label>
-                        <input
-                            type="text"
-                            placeholder="Enter ID Number"
-                            autoComplete="off"
-                            name="idNumber"
-                            value={idNumber}
-                            onChange={(e) => setIdNumber(e.target.value)}
-                            className="form-control rounded-0"
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="accountNumber"><strong>Account Number</strong></label>
-                        <input
-                            type="text"
-                            placeholder="Enter Account Number"
-                            autoComplete="off"
-                            name="accountNumber"
-                            value={accountNumber}
-                            onChange={(e) => setAccountNumber(e.target.value)}
-                            className="form-control rounded-0"
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="password"><strong>Password</strong></label>
-                        <input
-                            type="password"
-                            placeholder="Enter Password"
-                            name="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="form-control rounded-0"
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="confirmPassword"><strong>Confirm Password</strong></label>
-                        <input
-                            type="password"
-                            placeholder="Confirm Password"
-                            name="confirmPassword"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="form-control rounded-0"
-                        />
-                    </div>
-                    {error && <p className="text-danger">{error}</p>}
-                    <button type="submit" className="btn btn-success w-100 rounded-0">
-                        Register
-                    </button>
-                </form>
-                <p>Already Have an Account</p>
-                <Link to="/login" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">
-                    Login
-                </Link>
-            </div>
+        <div className="signup-container">
+            <h2>Register</h2>
+            <form onSubmit={handleSubmit}>
+
+                <div className="mb-3">
+                    <label htmlFor="firstName">First Name</label>
+                    <input
+                        type="text"
+                        placeholder="Enter First Name"
+                        name="firstName"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className="form-control"
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="lastName">Last Name</label>
+                    <input
+                        type="text"
+                        placeholder="Enter Last Name"
+                        name="lastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className="form-control"
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="email">Email</label>
+                    <input
+                        type="email"
+                        placeholder="Enter Email"
+                        name="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="form-control"
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="username">Username</label>
+                    <input
+                        type="text"
+                        placeholder="Enter Username"
+                        name="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        className="form-control"
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="idNumber">ID Number</label>
+                    <input
+                        type="text"
+                        placeholder="Enter ID Number"
+                        name="idNumber"
+                        value={idNumber}
+                        onChange={(e) => setIdNumber(e.target.value)}
+                        className="form-control"
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="accountNumber">Account Number</label>
+                    <input
+                        type="text"
+                        placeholder="Enter Account Number"
+                        name="accountNumber"
+                        value={accountNumber}
+                        onChange={(e) => setAccountNumber(e.target.value)}
+                        className="form-control"
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="password">Password</label>
+                    <input
+                        type="password"
+                        placeholder="Enter Password"
+                        name="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="form-control"
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <input
+                        type="password"
+                        placeholder="Confirm Password"
+                        name="confirmPassword"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="form-control"
+                    />
+                </div>
+
+                {error && <p className="text-danger">{error}</p>}
+
+                <button type="submit" className="btn btn-success w-100">
+                    Register
+                </button>
+
+            </form>
+
+            <p>Already Have an Account?</p>
+            <Link to="/login" className="btn btn-default w-100">
+                Login
+            </Link>
         </div>
     );
 }

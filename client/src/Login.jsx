@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import './Login.css';
 
 function Login() {
     const [identifier, setIdentifier] = useState(""); // Username or account number
@@ -65,43 +66,41 @@ function Login() {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
-            <div className="bg-white p-3 rounded w-25">
-                <h2>Login</h2>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                        <label htmlFor="identifier"><strong>Username or Account Number</strong></label>
-                        <input
-                            type="text"
-                            placeholder="Enter Username or Account Number"
-                            autoComplete="off"
-                            name="identifier"
-                            value={identifier}
-                            onChange={(e) => setIdentifier(e.target.value)}
-                            className="form-control rounded-0"
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="password"><strong>Password</strong></label>
-                        <input
-                            type="password"
-                            placeholder="Enter Password"
-                            name="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="form-control rounded-0"
-                        />
-                    </div>
-                    {error && <p className="text-danger">{error}</p>}
-                    <button type="submit" className="btn btn-success w-100 rounded-0">
-                        Login
-                    </button>
-                </form>
-                <p>Don't Have an Account?</p>
-                <Link to="/signup" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">
-                    Signup
-                </Link>
-            </div>
+        <div className="login-container">
+            <h2>Login</h2>
+            <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                    <label htmlFor="identifier"><strong>Username or Account Number</strong></label>
+                    <input
+                        type="text"
+                        placeholder="Enter Username or Account Number"
+                        autoComplete="off"
+                        name="identifier"
+                        value={identifier}
+                        onChange={(e) => setIdentifier(e.target.value)}
+                        className="form-control rounded-0"
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="password"><strong>Password</strong></label>
+                    <input
+                        type="password"
+                        placeholder="Enter Password"
+                        name="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="form-control rounded-0"
+                    />
+                </div>
+                {error && <p className="text-danger">{error}</p>}
+                <button type="submit" className="btn btn-success w-100 rounded-0">
+                    Login
+                </button>
+            </form>
+            <p>Don't Have an Account?</p>
+            <Link to="/signup" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">
+                Signup
+            </Link>
         </div>
     );
 }

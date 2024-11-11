@@ -1,0 +1,92 @@
+/* Signup.css */
+
+/* Overall Background Styling */
+body {
+    background: linear-gradient(to right, #f0f4f8, #d9e2ec);
+    font-family: 'Arial', sans-serif;
+    color: #334e68;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Container Styling */
+.signup-container {
+    background-color: #ffffff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 2rem;
+   width: 150%;
+    text-align: center;
+}
+
+/* Heading Styling */
+.signup-container h2 {
+    color: #102a43;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* Form Label Styling */
+.signup-container label {
+    font-size: 0.9rem;
+    color: #627d98;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+/* Input Field Styling */
+.signup-container .form-control {
+    border-radius: 6px;
+    border: 1px solid #bcccdc;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    color: #334e68;
+    background-color: #f0f4f8;
+}
+
+.signup-container .form-control:focus {
+    border-color: #3f72af;
+    box-shadow: 0 0 0 2px rgba(63, 114, 175, 0.2);
+}
+
+/* Button Styling */
+.signup-container .btn-success {
+    background-color: #3f72af;
+    border: none;
+    padding: 0.75rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.signup-container .btn-success:hover {
+    background-color: #295182;
+}
+
+.signup-container .btn-default {
+    color: #3f72af;
+    border: 1px solid #3f72af;
+    margin-top: 0.5rem;
+    font-weight: 600;
+}
+
+.signup-container .btn-default:hover {
+    background-color: #e3eaf2;
+}
+
+/* Error Message Styling */
+.signup-container .text-danger {
+    color: #d9534f;
+    font-size: 0.85rem;
+}
+
+/* Already Have an Account Text */
+.signup-container p {
+    margin-top: 1rem;
+    color: #627d98;
+    font-size: 0.85rem;
+}
