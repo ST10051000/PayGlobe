@@ -1,28 +1,18 @@
 version: 2.1
-
 jobs:
-  sonar_scan:
+  sonarcloud:
     docker:
-      - image: circleci/openjdk:11-jdk  # Use a suitable Docker image with Java installed
+      - image: circleci/python:3.8
     steps:
-      - checkout  # Checkout the code
+      - checkout
       - run:
-          name: Install SonarScanner
+          name: Run SonarQube Analysis
           command: |
-            curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
-            unzip sonar-scanner-cli.zip -d /tmp
-            export PATH="/tmp/sonar-scanner-4.6.2.2472-linux/bin:$PATH"
-      - run:
-          name: Run SonarQube Scan
-          command: |
-            sonar-scanner \
-              -Dsonar.projectKey=PayPortal \
-              -Dsonar.organization=ST10051000 \
-              -Dsonar.host.url=https://sonarcloud.io \
-              -Dsonar.login=$SONAR_TOKEN  # Using the token from environment variables
-
+            curl -sSLo sonarqube-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+            unzip sonarqube-scanner-cli.zip
+            ./sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner -Dsonar.projectKey=your_project_key -Dsonar.organization=your_organization_key -Dsonar.host.url=http://localhost:9000 -Dsonar.login=$SONAR_TOKEN
 workflows:
   version: 2
-  sonar_analysis:
+  build:
     jobs:
-      - sonar_scan
+      - sonarcloud
